@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--importo de forma nativa el vues-->
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </head>
+</html>
+<body>
+    <!--La etiqueta es sobre la que trabkar vues, ninguna otra-->
+    <main>
+       <table>
+           <thead>
+               <th>NOMBRE</th>
+               <th>CEDULA</th>
+               <th>TELEFONO</th>
+               <th>EDAD</th>
+               <th>ESTADO</th>
+           </thead>
+           <tbody>
+               <tr v-for="(item,idx) in users">
+                   <td>{{item.nombre}}</td>
+                   <td>{{item.cedula}}</td>
+                   <td>{{item.telefono}}</td>
+                   <td>{{item.edad}}</td>
+                   <td>
+                        <b v-if="item.edad && item.edad>=18">MAYOR DE EDAD</b>
+                        <b v-else>MENOR DE EDAD</b>
+                   </td>
+                   <!--<td>{{item.estado}}</td>-->
+               </tr>
+           </tbody>
+       </table>
+       <form @submit.prevent="createUser">
+           <input type="text" placeholder="nombre" v-model="objUser.nombre"/><br/>
+           <input type="text" placeholder="cedula" v-model="objUser.cedula"/><br/>
+           <input type="text" placeholder="telefono" v-model="objUser.telefono"/><br/>
+           <input type="text" placeholder="edad" v-model="objUser.edad"/><br/>
+           <input type="submit" value="GUARDAR"/>
+       </form>
+        {{$data}}
+    </main>
+</body>
+<!--Dicho objeto se va a enlazar con la eqtiqueta main, todas la s variables q dese q se ejeucten en la etiqueta main deben declararse en data(todas las variables que se ejecyten en mi proceso), ademas cuando se rebnadrize la rtiqueta main html pasa a ser javascript-->
+<script type="text/javascript">
+    new Vue({
+            el:'main',
+            data:{
+                users:[],
+                objUser:{'nombre':null,'cedula':null,'telefono':null,'edad':null,'estado':null}
+            },
+            methods:{
+                createUser(){
+                    /*
+                    if (this.objUser.edad>18){
+                        this.objUser.estado='MAYOR DE EDAD';
+                    }
+                    else{
+                        this.objUser.estado='MENOR DE EDAD';
+                    }
+                    */
+                    this.users.unshift(this.objUser);
+                    this.orderUser;
+                    this.objUser={'nombre':null,'cedula':null,'telefono':null,'edad':null,'estado':null}
+
+                }
+            },
+            computed:{
+                orderUser(){
+                    return this.users.sort(function(a,b){
+                        if(a.nombre>b.nombre){
+                            return 1;
+                        }
+                        if(a.nombre<b.nombre){
+                            return -1;
+                        }
+                        return 0;
+                    });
+                }
+            }
+    });
+</script>
